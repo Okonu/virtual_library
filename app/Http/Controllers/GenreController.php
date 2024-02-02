@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GenreRequests\StoreGenreRequest;
 use App\Http\Requests\GenreRequests\UpdateGenreRequest;
 use App\Models\Genre;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Inertia\Inertia;
 
 class GenreController extends Controller
@@ -15,15 +14,10 @@ class GenreController extends Controller
      */
     public function index()
     {
-        $genre = Genre::query()
-            ->when(request()->filled('search'), fn (Builder $query) => $query->where('name', 'like', '%'.request('search').'%'))
-            ->orderBy('name')
-            ->paginate(request('per_page', 10))
-            ->withQueryString();
+        $genres = Genre::all();
 
         return Inertia::render('Genres/Index', [
-            'filters' => request()->all(),
-            'genres' => Genre::all(),
+            'genres' => $genres,
         ]);
     }
 
@@ -32,6 +26,7 @@ class GenreController extends Controller
      */
     public function create()
     {
+        return Inertia::render('Genres/Create');
     }
 
     /**
@@ -39,11 +34,11 @@ class GenreController extends Controller
      */
     public function store(StoreGenreRequest $request)
     {
-        $request->validated();
+        $validatedData = $request->validated();
 
-        Genre::create($request);
+        Genre::create($validatedData);
 
-        $this->toast('Successfully created a new genre');
+        session()->flash('message', 'Successfully created a new genre');
 
         return back();
     }
@@ -53,6 +48,7 @@ class GenreController extends Controller
      */
     public function show(Genre $genre)
     {
+        return Inertia::render('Genres/Show', ['genre' => $genre]);
     }
 
     /**
@@ -60,6 +56,7 @@ class GenreController extends Controller
      */
     public function edit(Genre $genre)
     {
+        return Inertia::render('Genres/Edit', ['genre' => $genre]);
     }
 
     /**
@@ -69,7 +66,8 @@ class GenreController extends Controller
     {
         $genre->update($request->validated());
 
-        $this->toast('Successfully updated the genre.');
+        // $this->toast('Successfully updated the genre.');
+        session()->flash('message', 'Genre updated successfully');
 
         return back();
     }
@@ -81,7 +79,8 @@ class GenreController extends Controller
     {
         $genre->delete();
 
-        $this->toast('Successfully deleted the genre.');
+        // $this->toast('Successfully deleted the genre.');
+        session()->flash('message', 'Genre deleted successfully');
 
         return back();
     }

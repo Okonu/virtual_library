@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GenreController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -36,3 +37,13 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::prefix('genres')->group(function () {
+    Route::get('/', [GenreController::class, 'index'])->name('genres.index');
+    Route::get('/create', [GenreController::class, 'create'])->name('genres.create');
+    Route::post('/', [GenreController::class, 'store'])->name('genres.store');
+    Route::get('/{genre}', [GenreController::class, 'show'])->name('genres.show');
+    Route::get('/{genre}/edit', [GenreController::class, 'edit'])->name('genres.edit');
+    Route::put('/{genre}', [GenreController::class, 'update'])->name('genres.update');
+    Route::delete('/{genre}', [GenreController::class, 'destroy'])->name('genres.destroy');
+});
