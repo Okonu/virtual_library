@@ -40,7 +40,7 @@ class GenreController extends Controller
 
         session()->flash('message', 'Successfully created a new genre');
 
-        return back();
+        return Inertia::location('/genres');
     }
 
     /**
@@ -69,7 +69,7 @@ class GenreController extends Controller
         // $this->toast('Successfully updated the genre.');
         session()->flash('message', 'Genre updated successfully');
 
-        return back();
+        return Inertia::location('/genres');
     }
 
     /**
@@ -82,6 +82,6 @@ class GenreController extends Controller
         // $this->toast('Successfully deleted the genre.');
         session()->flash('message', 'Genre deleted successfully');
 
-        return back();
+        return Inertia::location('/genres');
     }
 }
