@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AuthorRequests\StoreAuthorRequest;
 use App\Http\Requests\GenreRequests\UpdateGenreRequest;
 use App\Models\Author;
+use App\Models\Genre;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class AuthorController extends Controller
@@ -26,7 +28,13 @@ class AuthorController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Authors/Create');
+        $genres = Genre::all();
+
+        // dd($genres);
+
+        return Inertia::render('Authors/Create', [
+            'genres' => $genres
+        ]);
     }
 
     /**
@@ -60,7 +68,9 @@ class AuthorController extends Controller
     {
         $author->load('genre');
 
-        return Inertia::render('Authors/Edit', ['author' =>$author]);
+        $genres = Genre::all();
+
+        return Inertia::render('Authors/Edit', ['author' =>$author, 'genres' =>$genres]);
 
     }
 
@@ -69,12 +79,17 @@ class AuthorController extends Controller
      */
     public function update(UpdateGenreRequest $request, Author $author)
     {
+        // Log::info($request->all());
+
         $author->update($request->validated());
+
+        // dd($author);
 
         session()->flash('message', 'Author has been updated');
 
         return Inertia::location('/authors');
     }
+
 
     /**
      * Remove the specified resource from storage.

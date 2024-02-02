@@ -1,39 +1,54 @@
 <template>
     <div>
-        <h1>New Author</h1>
-        <form @submit.prevent="store">
-            <input v-model="form.name" type="text" placeholder="Name">
-            <input v-model="form.gender" type="text" placeholder="Gender">
-            <input v-model="form.age" type="text" placeholder="Age">
-            <input v-model="form.country" type="text" placeholder="Country">
-            <select v-model="form.genre_id">
-                <option v-for="genre in genres" :value="genre.id" :key="genre.id">
-                    {{ genre.name }}
-                </option>
-            </select>
-            <button type="submit">Create</button>
-        </form>
-    </div>
-</template>
+       <h1>Create New Author</h1>
+       <form @submit.prevent="handleSubmit">
+         <label for="name">Name:</label>
+         <input id="name" v-model="author.name" required />
 
-<script>
-export default {
+         <label for="gender">Gender:</label>
+         <select id="gender" v-model="author.gender">
+           <option value="male">Male</option>
+           <option value="female">Female</option>
+         </select>
+
+         <label for="age">Age:</label>
+         <input id="age" v-model="author.age" type="number" required />
+
+         <label for="country">Country:</label>
+         <input id="country" v-model="author.country" required />
+
+         <label for="genre">Genre:</label>
+         <select id="genre" v-model="author.genre_id">
+        <option v-for="genre in genres" :key="genre.id" :value="genre.id">{{ genre.name }}</option>
+        </select>
+         <button type="submit">Create Author</button>
+       </form>
+    </div>
+   </template>
+
+   <script>
+   export default {
+    props: {
+       genres: Array
+    },
     data() {
-        return {
-            form: this.$inertia.form({
-                name: '',
-                gender: '',
-                age: '',
-                country: '',
-                genre_id: '',
-            }),
-            genres: [],
-        };
+       return {
+         author: {
+           name: '',
+           gender: '',
+           age: null,
+           country: '',
+           genre_id: null
+         }
+       };
     },
     methods: {
-        store() {
-            this.form.post('/authors')
-        },
-    },
-};
-</script>
+       async handleSubmit() {
+         const response = await this.$inertia.post('/authors', this.author);
+         if (!response.errors) {
+           this.$inertia.visit('/authors');
+         }
+       }
+    }
+   };
+   </script>

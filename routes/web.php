@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -53,8 +54,18 @@ Route::prefix('authors')->group(function () {
     Route::get('/', [AuthorController::class, 'index'])->name('authors.index');
     Route::get('/create', [AuthorController::class, 'create'])->name('authors.create');
     Route::post('/', [AuthorController::class, 'store'])->name('authors.store');
-    Route::get('/{genre}', [AuthorController::class, 'show'])->name('authors.show');
-    Route::get('/{genre}/edit', [AuthorController::class, 'edit'])->name('authors.edit');
-    Route::put('/{genre}', [AuthorController::class, 'update'])->name('authors.update');
-    Route::delete('/{genre}', [AuthorController::class, 'destroy'])->name('authors.destroy');
+    Route::get('/{author}', [AuthorController::class, 'show'])->name('authors.show');
+    Route::get('/{author}/edit', [AuthorController::class, 'edit'])->name('authors.edit');
+    Route::put('/{author}', [AuthorController::class, 'update'])->name('authors.update');
+    Route::delete('/{author}', [AuthorController::class, 'destroy'])->name('authors.destroy');
+});
+
+Route::prefix('books')->group(function () {
+    Route::get('/', [BookController::class, 'index'])->name('books.index');
+    Route::get('/create', [BookController::class, 'create'])->name('books.create');
+    Route::post('/', [BookController::class, 'store'])->name('books.store');
+    Route::get('/{book}', [BookController::class, 'show'])->name('books.show');
+    Route::get('/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
+    Route::put('/{book}', [BookController::class, 'update'])->name('books.update');
+    Route::delete('/{book}', [BookController::class, 'destroy'])->name('books.destroy');
 });

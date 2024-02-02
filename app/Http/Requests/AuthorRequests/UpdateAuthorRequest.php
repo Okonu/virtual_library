@@ -26,7 +26,7 @@ class UpdateAuthorRequest extends FormRequest
             'gender' => 'required|string|max:255',
             'age' => 'required|integer|min:1',
             'country' => 'required|string|max:255',
-            'genre_id' => 'required|integer|exists:genres,id',
+            'genre_id' => 'required',
         ];
     }
 }

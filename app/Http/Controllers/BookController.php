@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreBookRequest;
-use App\Http\Requests\UpdateBookRequest;
+use App\Http\Requests\BookRequests\StoreBookRequest;
+use App\Http\Requests\BookRequests\UpdateBookRequest;
+use App\Models\Author;
 use App\Models\Book;
+use Inertia\Inertia;
 
 class BookController extends Controller
 {
@@ -13,7 +15,9 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        $books = Book::with('author')->get();
+
+        return Inertia::render('Books/Index', ['books' => $books]);
     }
 
     /**
@@ -21,7 +25,9 @@ class BookController extends Controller
      */
     public function create()
     {
-        //
+        $authors = Author::all();
+
+        return Inertia::render('Books/Create', ['authors' => $authors]);
     }
 
     /**
@@ -29,7 +35,13 @@ class BookController extends Controller
      */
     public function store(StoreBookRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+
+        Book::create($validatedData);
+
+        session()->flash('success', 'Book created successfully');
+
+        return Inertia::location('/books');
     }
 
     /**
@@ -37,7 +49,9 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        //
+        $book->load('author');
+
+        return Inertia::render('Books/Show', ['book' => $book]);
     }
 
     /**
@@ -45,7 +59,12 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
-        //
+        $book->load('author');
+
+        $authors = Author::all();
+
+        return Inertia::render('Books/Edit', ['book' => $book, 'authors' => $authors]);
+
     }
 
     /**
@@ -53,7 +72,11 @@ class BookController extends Controller
      */
     public function update(UpdateBookRequest $request, Book $book)
     {
-        //
+        $book->update($request->validated());
+
+        session()->flash('success', 'Book updated successfully');
+
+        return Inertia::location('/books');
     }
 
     /**
@@ -61,6 +84,10 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        $book->delete();
+
+        session()->flash('success', 'Book deleted successfully');
+
+        return Inertia::location('/books');
     }
 }
