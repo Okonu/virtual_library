@@ -11,7 +11,7 @@ class UpdateAuthorRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,6 +22,11 @@ class UpdateAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => 'required|string|max:255',
+            'gender' => 'required|string|max:255',
+            'age' => 'required|integer|min:1',
+            'country' => 'required|string|max:255',
+            'genre_id' => 'required|integer|exists:genres,id',
         ];
     }
 }

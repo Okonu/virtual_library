@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -46,4 +47,14 @@ Route::prefix('genres')->group(function () {
     Route::get('/{genre}/edit', [GenreController::class, 'edit'])->name('genres.edit');
     Route::put('/{genre}', [GenreController::class, 'update'])->name('genres.update');
     Route::delete('/{genre}', [GenreController::class, 'destroy'])->name('genres.destroy');
+});
+
+Route::prefix('authors')->group(function () {
+    Route::get('/', [AuthorController::class, 'index'])->name('authors.index');
+    Route::get('/create', [AuthorController::class, 'create'])->name('authors.create');
+    Route::post('/', [AuthorController::class, 'store'])->name('authors.store');
+    Route::get('/{genre}', [AuthorController::class, 'show'])->name('authors.show');
+    Route::get('/{genre}/edit', [AuthorController::class, 'edit'])->name('authors.edit');
+    Route::put('/{genre}', [AuthorController::class, 'update'])->name('authors.update');
+    Route::delete('/{genre}', [AuthorController::class, 'destroy'])->name('authors.destroy');
 });
